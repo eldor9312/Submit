@@ -11,7 +11,7 @@ class UsersSerializer(serializers.HyperlinkedModelSerializer):
 class PerevalAddedSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PerevalAdded
-        fields = ['id','beauty_title','title','other_titles','connect','add_time','winter_lvl','summer_lvl','autumn_lvl','spring_lvl','coord_id','status']
+        fields = ['id','beauty_title','title','other_titles','connect','add_time','winter_lvl','summer_lvl','autumn_lvl','spring_lvl','coord_id','status','creator']
 
 
 class CoordinatesSerializer(serializers.HyperlinkedModelSerializer):
@@ -36,6 +36,12 @@ class ActivitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Activity
         fields = ['id','name']
+
+class PerevalChangedSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = PerevalAdded
+        fields = ['beautyTitle', 'title', 'other_titles', 'connect', 'winter_lvl', 'summer_lvl', 'autumn_lvl',
+                  'spring_lvl']
 
 
 

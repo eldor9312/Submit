@@ -22,6 +22,11 @@ class PerevalAdded(models.Model):
     spring_lvl = models.CharField()
     coord_id = models.ForeignKey('Coordinates',on_delete=models.CASCADE)
     status = models.CharField(choices=STATUS_CHOICES)
+    creator = models.ForeignKey('Users',on_delete=models.CASCADE)
+
+    # def update(instance, *args, **kwargs):
+    #     if instance.status == 'New':
+    #         print('lol')
 
 
 class Coordinates(models.Model):
