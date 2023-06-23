@@ -1,49 +1,35 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
+from rest_framework.request import Request
 from rest_framework.response import Response
 
-
-from .models import Users, PerevalAdded, Coordinates, PerevalImages, PerevalAreas, Activity
-from .serializers import UsersSerializer, PerevalAddedSerializer, CoordinatesSerializer, PerevalImagesSerializer, \
-    PerevalAreasSerializer, ActivitySerializer, PerevalChangedSerializer
-
-
-
+from .models import *
+from .serializers import *
 
 
 class UsersViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
     queryset = Users.objects.all()
     serializer_class = UsersSerializer
-    http_method_names = ['post','get']
-
-
-class PerevalAddedViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = PerevalAdded.objects.all()
-    serializer_class = PerevalAddedSerializer
-    http_method_names = ['post','get']
-
-
-
-
-class CoordinatesViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = Coordinates.objects.all()
-    serializer_class = CoordinatesSerializer
     http_method_names = ['post']
 
 
-class PerevalImagesViewSet(viewsets.ModelViewSet):
-    queryset = PerevalImages.objects.all()
-    serializer_class = PerevalImagesSerializer
+class PerevalAddedViewSet(viewsets.ModelViewSet):
+    queryset = PerevalAdded.objects.all()
+    serializer_class = PerevalAddedSerializer
+    http_method_names = ['post', 'get']
+
+
+class CoordinatesViewSet(viewsets.ModelViewSet):
+    queryset = Coordinates.objects.all()
+    serializer_class = CoordinatesSerializer
+    http_method_names = ['post', 'patch']
+
+
+class ActivityViewSet(viewsets.ModelViewSet):
+    queryset = Activity.objects.all()
+    serializer_class = ActivitySerializer
     http_method_names = ['post']
 
 
@@ -53,9 +39,9 @@ class PerevalAreasViewSet(viewsets.ModelViewSet):
     http_method_names = ['post']
 
 
-class ActivityViewSet(viewsets.ModelViewSet):
-    queryset = Activity.objects.all()
-    serializer_class = ActivitySerializer
+class PerevalImagesViewSet(viewsets.ModelViewSet):
+    queryset = PerevalImages.objects.all()
+    serializer_class = PerevalImagesSerializer
     http_method_names = ['post']
 
 
@@ -67,6 +53,11 @@ def pereval_added_patch_method(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'PATCH':
+        if pereval.status != 'new':
+            return Response({
+                'state': 0,
+                'message': "Failed to update pereval!"
+            })
         serializer = PerevalChangedSerializer(pereval, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
@@ -75,9 +66,10 @@ def pereval_added_patch_method(request, pk):
                 'state': 1,
                 'message': "Successfully updated pereval!"
             })
-        return Response({
+        else:
+            return Response({
                 'state': 0,
-                'message': "Failed to update pereval!"
+                'message': f"{serializer.errors}"
             })
 
 

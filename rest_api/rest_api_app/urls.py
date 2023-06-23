@@ -1,5 +1,6 @@
-from django.urls import include, path
 
-# urlpatterns = [
-#     path('', include(path)),
-# ]
+from django.urls import path
+
+urlpatterns = [
+    path('', ),
+]

@@ -16,25 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework import routers
 from rest_api_app import views
-
-
+from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UsersViewSet)
-router.register(r'pereval_added',views.PerevalAddedViewSet)
-router.register(r'coordinates',views.CoordinatesViewSet)
-router.register(r'pereval_images', views.PerevalImagesViewSet)
+router.register(r'pereval_added', views.PerevalAddedViewSet)
+router.register(r'coordinates', views.CoordinatesViewSet)
+router.register(r'activity', views.ActivityViewSet)
 router.register(r'pereval_areas', views.PerevalAreasViewSet)
-router.register(r'activity',views.ActivityViewSet)
-
+router.register(r'pereval_images', views.PerevalImagesViewSet)
 
 
 urlpatterns = [
    path('admin/', admin.site.urls),
    path('', include(router.urls)),
-   path('pereval_added/<int:pk>', views.pereval_added_patch_method),
+   path('pereval_added/<int:pk>/patch', views.pereval_added_patch_method),
    path('pereval_added/?user__email=<email>', views.pereval_added_patch_method),
    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
